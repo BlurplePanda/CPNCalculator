@@ -209,8 +209,8 @@ public class CPNCalculator{
             return Math.log10(evaluate(node.getChild(0)));
         }
         else if (node.numberOfChildren() == 2){
-            double base = evaluate(node.getChild(0));
             double operand = evaluate(node.getChild(0));
+            double base = evaluate(node.getChild(1));
             return Math.log(operand) / Math.log(base); // log rules :D
         }
         else {
