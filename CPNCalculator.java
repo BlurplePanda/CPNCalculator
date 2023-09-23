@@ -80,27 +80,21 @@ public class CPNCalculator{
             return Double.NaN;
         }
 
-        ExpElem item = expr.getItem();
-        if (item.operator.equals("#")) {
-            return item.value;
-        }
-        if (item.operator.equals("PI")) {
-            return Math.PI;
-        }
-        if (item.operator.equals("E")) {
-            return Math.E;
-        }
-        if (item.operator.equals("+")) {
-            return add(expr);
-        }
-        if (item.operator.equals("-")) {
-            return subtract(expr);
-        }
-        if (item.operator.equals("*")) {
-            return multiply(expr);
-        }
-        if (item.operator.equals("/")) {
-            return divide(expr);
+        switch (expr.getItem().operator) {
+            case "#":
+                return expr.getItem().value;
+            case "PI":
+                return Math.PI;
+            case "E":
+                return Math.E;
+            case "+":
+                return add(expr);
+            case "-":
+                return subtract(expr);
+            case "*":
+                return multiply(expr);
+            case "/":
+                return divide(expr);
         }
 
         return Double.NaN;
