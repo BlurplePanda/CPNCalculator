@@ -93,6 +93,9 @@ public class CPNCalculator{
         if (item.operator.equals("+")) {
             return add(expr);
         }
+        if (item.operator.equals("-")) {
+            return subtract(expr);
+        }
 
         return Double.NaN;
     }
@@ -108,6 +111,20 @@ public class CPNCalculator{
             total += evaluate(child);
         }
         return total;
+    }
+
+    /**
+     * Subtracts from the first child all other children
+     * @param node node to start from (-)
+     * @return the result
+     */
+    public double subtract(GTNode<ExpElem> node) {
+        //2* adds an extra copy (which gets taken away) so can use normal foreach
+        double result = 2 * evaluate(node.getChild(0));
+        for (GTNode<ExpElem> child : node) {
+            result -= evaluate(child);
+        }
+        return result;
     }
 
     /** 
