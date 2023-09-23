@@ -95,6 +95,22 @@ public class CPNCalculator{
                 return multiply(expr);
             case "/":
                 return divide(expr);
+            case "sqrt":
+                return Math.sqrt(evaluate(expr.getChild(0)));
+            case "log":
+                return log(expr);
+            case "ln":
+                return Math.log(evaluate(expr.getChild(0)));
+            case "sin":
+                return Math.sin(evaluate(expr.getChild(0)));
+            case "cos":
+                return Math.cos(evaluate(expr.getChild(0)));
+            case "tan":
+                return Math.tan(evaluate(expr.getChild(0)));
+            case "dist":
+                return dist(expr);
+            case "avg":
+                return add(expr) / expr.numberOfChildren();
         }
 
         return Double.NaN;
@@ -151,6 +167,32 @@ public class CPNCalculator{
             result /= evaluate(child);
         }
         return result;
+    }
+
+    public double log(GTNode<ExpElem> node) {
+        if (node.numberOfChildren() == 1) {
+            return Math.log10(evaluate(node.getChild(0)));
+        }
+        else {
+            double base = evaluate(node.getChild(0));
+            double operand = evaluate(node.getChild(0);
+            return Math.log(operand) / Math.log(base); // log rules :D
+        }
+    }
+
+    public double dist(GTNode<ExpElem> node) {
+        if (node.numberOfChildren() == 4) {
+            double xDist = evaluate(node.getChild(2)) - evaluate(node.getChild(0));
+            double yDist = evaluate(node.getChild(3)) - evaluate(node.getChild(1));
+            return Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
+        }
+        else if (node.numberOfChildren() == 6) {
+            double xDist = evaluate(node.getChild(3)) - evaluate(node.getChild(0));
+            double yDist = evaluate(node.getChild(4)) - evaluate(node.getChild(1));
+            double zDist = evaluate(node.getChild(5)) - evaluate(node.getChild(2));
+            return Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2) + Math.pow(zDist, 2));
+        }
+        else return Double.NaN;
     }
 
     /** 
