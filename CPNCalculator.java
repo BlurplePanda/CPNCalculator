@@ -96,12 +96,18 @@ public class CPNCalculator{
         if (item.operator.equals("-")) {
             return subtract(expr);
         }
+        if (item.operator.equals("*")) {
+            return multiply(expr);
+        }
+        if (item.operator.equals("/")) {
+            return divide(expr);
+        }
 
         return Double.NaN;
     }
 
     /**
-     * Adds up children
+     * Adds up evaluated children
      * @param node the node to start from (should be a + )
      * @return the result
      */
@@ -114,7 +120,7 @@ public class CPNCalculator{
     }
 
     /**
-     * Subtracts from the first child all other children
+     * Subtracts from the first operand (evaluated child node) all other operands
      * @param node node to start from (-)
      * @return the result
      */
@@ -123,6 +129,32 @@ public class CPNCalculator{
         double result = 2 * evaluate(node.getChild(0));
         for (GTNode<ExpElem> child : node) {
             result -= evaluate(child);
+        }
+        return result;
+    }
+
+    /**
+     * Multiplies all the operands (evaluated children) together
+     * @param node the "root" operator node (*)
+     * @return result
+     */
+    public double multiply(GTNode<ExpElem> node) {
+        double result = 1;
+        for (GTNode<ExpElem> child : node) {
+            result *= evaluate(child);
+        }
+        return result;
+    }
+
+    /**
+     * Divides the first operand by all the remaining operands
+     * @param node the "root" operator node (/)
+     * @return result
+     */
+    public double divide(GTNode<ExpElem> node) {
+        double result = Math.pow(evaluate(node.getChild(0)), 2); //squared for normal foreach
+        for (GTNode<ExpElem> child : node) {
+            result /= evaluate(child);
         }
         return result;
     }
