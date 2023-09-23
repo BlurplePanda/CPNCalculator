@@ -111,9 +111,10 @@ public class CPNCalculator{
                 return dist(expr);
             case "avg":
                 return add(expr) / expr.numberOfChildren();
+            default:
+                UI.println("The operator " + expr.getItem().operator + "is invalid");
+                return Double.NaN;
         }
-
-        return Double.NaN;
     }
 
     /**
