@@ -80,7 +80,34 @@ public class CPNCalculator{
             return Double.NaN;
         }
 
+        ExpElem item = expr.getItem();
+        if (item.operator.equals("#")) {
+            return item.value;
+        }
+        if (item.operator.equals("PI")) {
+            return Math.PI;
+        }
+        if (item.operator.equals("E")) {
+            return Math.E;
+        }
+        if (item.operator.equals("+")) {
+            return add(expr);
+        }
+
         return Double.NaN;
+    }
+
+    /**
+     * Adds up children
+     * @param node the node to start from (should be a + )
+     * @return the result
+     */
+    public double add(GTNode<ExpElem> node) {
+        double total = 0;
+        for (GTNode<ExpElem> child : node) {
+            total += evaluate(child);
+        }
+        return total;
     }
 
     /** 
