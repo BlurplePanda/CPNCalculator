@@ -114,7 +114,7 @@ public class CPNCalculator{
             case "avg":
                 return mean(expr);
             default:
-                UI.println("The operator " + expr.getItem().operator + "is invalid");
+                UI.println("The operator \"" + expr.getItem().operator + "\" is invalid");
                 return Double.NaN;
         }
     }
