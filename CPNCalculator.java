@@ -95,22 +95,24 @@ public class CPNCalculator{
                 return multiply(expr);
             case "/":
                 return divide(expr);
+            case "^":
+                return power(expr);
             case "sqrt":
-                return Math.sqrt(evaluate(expr.getChild(0)));
+                return root(expr);
             case "log":
                 return log(expr);
             case "ln":
-                return Math.log(evaluate(expr.getChild(0)));
+                return ln(expr);
             case "sin":
-                return Math.sin(evaluate(expr.getChild(0)));
+                return sin(expr);
             case "cos":
-                return Math.cos(evaluate(expr.getChild(0)));
+                return cos(expr);
             case "tan":
-                return Math.tan(evaluate(expr.getChild(0)));
+                return tan(expr);
             case "dist":
                 return dist(expr);
             case "avg":
-                return add(expr) / expr.numberOfChildren();
+                return mean(expr);
             default:
                 UI.println("The operator " + expr.getItem().operator + "is invalid");
                 return Double.NaN;
@@ -123,6 +125,10 @@ public class CPNCalculator{
      * @return the result
      */
     public double add(GTNode<ExpElem> node) {
+        if (node.numberOfChildren() == 0) {
+            UI.println("Needs at least one operand!");
+            return Double.NaN;
+        }
         double total = 0;
         for (GTNode<ExpElem> child : node) {
             total += evaluate(child);
@@ -136,6 +142,10 @@ public class CPNCalculator{
      * @return the result
      */
     public double subtract(GTNode<ExpElem> node) {
+        if (node.numberOfChildren() == 0) {
+            UI.println("Needs at least one operand!");
+            return Double.NaN;
+        }
         //2* adds an extra copy (which gets taken away) so can use normal foreach
         double result = 2 * evaluate(node.getChild(0));
         for (GTNode<ExpElem> child : node) {
@@ -150,6 +160,10 @@ public class CPNCalculator{
      * @return result
      */
     public double multiply(GTNode<ExpElem> node) {
+        if (node.numberOfChildren() == 0) {
+            UI.println("Needs at least one operand!");
+            return Double.NaN;
+        }
         double result = 1;
         for (GTNode<ExpElem> child : node) {
             result *= evaluate(child);
@@ -163,6 +177,10 @@ public class CPNCalculator{
      * @return result
      */
     public double divide(GTNode<ExpElem> node) {
+        if (node.numberOfChildren() == 0) {
+            UI.println("Needs at least one operand!");
+            return Double.NaN;
+        }
         double result = Math.pow(evaluate(node.getChild(0)), 2); //squared for normal foreach
         for (GTNode<ExpElem> child : node) {
             result /= evaluate(child);
@@ -170,15 +188,67 @@ public class CPNCalculator{
         return result;
     }
 
+    public double power(GTNode<ExpElem> node) {
+        if (node.numberOfChildren() != 2) {
+            UI.println("Needs two operands!");
+            return Double.NaN;
+        }
+        return Math.pow(evaluate(node.getChild(0)), evaluate(node.getChild(1)));
+    }
+
+    public double root(GTNode<ExpElem> node) {
+        if (node.numberOfChildren() != 1) {
+            UI.println("Needs a single operand!");
+            return Double.NaN;
+        }
+        return Math.sqrt(evaluate(node.getChild(0)));
+    }
+
     public double log(GTNode<ExpElem> node) {
         if (node.numberOfChildren() == 1) {
             return Math.log10(evaluate(node.getChild(0)));
         }
-        else {
+        else if (node.numberOfChildren() == 2){
             double base = evaluate(node.getChild(0));
-            double operand = evaluate(node.getChild(0);
+            double operand = evaluate(node.getChild(0));
             return Math.log(operand) / Math.log(base); // log rules :D
         }
+        else {
+            UI.println("Must have one or two operands!");
+            return Double.NaN;
+        }
+    }
+
+    public double ln(GTNode<ExpElem> node) {
+        if (node.numberOfChildren() != 1) {
+            UI.println("Needs a single operand!");
+            return Double.NaN;
+        }
+        return Math.log(evaluate(node.getChild(0)));
+    }
+
+    public double sin(GTNode<ExpElem> node) {
+        if (node.numberOfChildren() != 1) {
+            UI.println("Needs a single operand!");
+            return Double.NaN;
+        }
+        return Math.sin(evaluate(node.getChild(0)));
+    }
+
+    public double cos(GTNode<ExpElem> node) {
+        if (node.numberOfChildren() != 1) {
+            UI.println("Needs a single operand!");
+            return Double.NaN;
+        }
+        return Math.cos(evaluate(node.getChild(0)));
+    }
+
+    public double tan(GTNode<ExpElem> node) {
+        if (node.numberOfChildren() != 1) {
+            UI.println("Needs a single operand!");
+            return Double.NaN;
+        }
+        return Math.tan(evaluate(node.getChild(0)));
     }
 
     public double dist(GTNode<ExpElem> node) {
@@ -193,7 +263,18 @@ public class CPNCalculator{
             double zDist = evaluate(node.getChild(5)) - evaluate(node.getChild(2));
             return Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2) + Math.pow(zDist, 2));
         }
-        else return Double.NaN;
+        else {
+            UI.println("Needs four or six operands!");
+            return Double.NaN;
+        }
+    }
+
+    public double mean(GTNode<ExpElem> node) {
+        if (node.numberOfChildren() == 0) {
+            UI.println("Needs at least one operand!");
+            return Double.NaN;
+        }
+        return add(node) / node.numberOfChildren();
     }
 
     /** 
